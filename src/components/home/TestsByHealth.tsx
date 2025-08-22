@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 
 // Component for a single card
-const Card = ({ imageUrl, label }) => {
+const Card = ({ imageUrl, label } :any) => {
   return (
     <Link href={`/tests/${label.toLowerCase()}`} className="flex flex-col items-center justify-center p-4 cursor-pointer hover:bg-gray-100 rounded-lg transition duration-300">
       {/* Container for the circular icon with a gradient background */}
