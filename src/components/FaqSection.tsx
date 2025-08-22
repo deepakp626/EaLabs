@@ -18,7 +18,7 @@ const faqs = [
   {
     question: "What happens if I don't get a response from a doctor?",
     answer:
-      "You can reschedule or request another doctor if you don’t get a response in time.",
+      "You can reschedule or request another doctor if you don't get a response in time.",
   },
   {
     question: "What is the online doctor consultations?",
@@ -32,9 +32,9 @@ const faqs = [
 ];
 
 const FaqSection = () => {
-  const [openIndex, setOpenIndex] = useState(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const toggle = (i) => {
+  const toggle = (i: number) => {
     setOpenIndex(openIndex === i ? null : i);
   };
 
