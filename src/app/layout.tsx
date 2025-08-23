@@ -7,6 +7,9 @@ import Footer from "@/components/Footer";
 import FaqSection from "@/components/FaqSection";
 import ReviewSlider from "@/components/ReviewSlider";
 
+// database connection setup
+import "@/lib/initDb"; // will run dbConnect() when the app starts
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
