@@ -13,14 +13,14 @@ interface ICard extends Document {
 
 // Schema for the cards 
 const cardSchema = new Schema<ICard>({
-  title: { type: String, required: true },
-  image: { type: Buffer, required: true }, // change to String if URL
+  title: { type: String },
+  image: { type: Buffer }, // change to String if URL
 });
 
 // Schema for the Hero model
 const heroSchema = new Schema<IHero>({
-  heroimage: { type: Buffer, required: true },
-  cards: { type: [cardSchema], required: true },
+  heroimage: { type: Buffer  },
+  cards: { type: [cardSchema] },
 });
 
 // Create and export the Mongoose model

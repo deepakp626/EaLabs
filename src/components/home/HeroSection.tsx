@@ -1,7 +1,29 @@
 'use client';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import axios from 'axios';
 
 const HeroSection = () => {
+  const [heroData, setHeroData] = useState(null);
+  console.log('heroData:', heroData);
+
+  useEffect(() => {
+    const fetchHeroData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/admin/herosection');
+        setHeroData(response.data);
+      } catch (error) {
+        console.error('Error fetching hero data:', error);
+      }
+    };
+
+    fetchHeroData();
+  }, []);
+
+  if (!heroData) {
+    return <div>Loading...</div>; // Or any loading indicator
+  }
+
   return (
     <section className="mx-6 bg-[#ADE9E6] rounded-3xl py-16 px-6 md:px-20 overflow-hidden mt-4">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row ">
@@ -32,7 +54,15 @@ const HeroSection = () => {
 
         {/* right image */}
         <div className="flex-1 mt-10 md:mt-0 relative rounded-2xl">
-          <div className="rounded-2xl w-full h-full absolute inset-0 bg-[url('https://cdn.prod.website-files.com/600c68cb72173ece9c8958ed/637dc29d23239b4f6f305166_Hero%20Section.webp')] bg-no-repeat bg-cover bg-center"></div>
+          {heroData.heroimage && (
+            <Image
+              src={`data:image/jpeg;base64,${Buffer.from(heroData.heroimage).toString('base64')}`}
+              alt="Hero Image"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-2xl"
+            />
+          )}
         </div>
       </div>
     </section>
