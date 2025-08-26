@@ -58,14 +58,14 @@ const Partners = () => {
     label: "Sample Collection",
     title: "Health Test at  your home",
     button: "Book Now",
-    image: "/home-test.png",      // add to /public
+    image: "https://static.thenounproject.com/png/2292434-200.png",      // add to /public
     bg: "bg-[#B2DFE7]"
   },
   {
     label: "Lab Test",
     title: "Visit a lab near you",
     button: "Appointment now",
-    image: "/lab-test.png",       // add to /public
+    image: "https://static.thenounproject.com/png/2292434-200.png",       // add to /public
     bg: "bg-[#F8E16C]"
   }
 ];

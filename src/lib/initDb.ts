@@ -1,5 +1,13 @@
+// src/lib/initMongo.ts
 import dbConnect from "./mongoDB";
 
-dbConnect()
-  .then(() => console.log("✅ MongoDB connected at startup"))
-  .catch((err) => console.error("❌ MongoDB connection failed:", err));
+(async () => {
+  try {
+    await dbConnect();
+    console.log("✅ MongoDB connected at startup");
+  } catch (err) {
+    console.error("❌ MongoDB connection failed:", err);
+  }
+})();
+
+export default dbConnect;

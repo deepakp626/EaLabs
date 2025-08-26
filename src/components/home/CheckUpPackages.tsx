@@ -1,25 +1,26 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Heading from '@/components/Heading';
+import { fetchCheckupPackages } from '@/store/features/checkupPackagesSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 // Main App component which contains the entire tab section UI
 const CheckUpPackages = () => {
+    const dispatch = useDispatch();
+    const { categories, cards } = useSelector((state: RootState) => state.checkupPackages);
+    console.log(categories, cards);
+
     // Use state to keep track of the currently active tab
     const [activeTab, setActiveTab] = useState('all-tests');
 
-    // Define the data for all the tabs
+    useEffect(() => {
+        dispatch(fetchCheckupPackages());
+    }, [dispatch]);
+
+    // Use categories from Redux store, with a default "All tests" option
     const tabs = [
         { id: 'all-tests', name: 'All tests' },
-        { id: 'full-body-checkup', name: 'Full body Check up' },
-        { id: 'diabetes', name: 'Diabetes' },
-        { id: 'heart', name: 'Heart' },
-        { id: 'cancer', name: 'Cancer' },
-        { id: 'vitamin', name: 'Vitamin' },
-        { id: 'women-health', name: 'Women Health' },
-        { id: 'skin-care', name: 'Skin care' },
-        { id: 'liver', name: 'Liver' },
-        { id: 'kidney', name: 'Kidney' },
-        { id: 'stress', name: 'Stress' },
+        ...categories.map(category => ({ id: category, name: category }))
     ];
 
     // Define the data for the product cards, now with a 'category' field for filtering
@@ -29,8 +30,6 @@ const CheckUpPackages = () => {
             category: 'full-body-checkup',
             title: 'Medicare Full body Health Checkup',
             subtitle: 'Includes 12 Tests',
-            price: '$430.00',
-            oldPrice: '$80.00',
             icon: (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10 text-pink-500">
                     <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6a.75.75 0 0 0 .15.45l4.5 4.5a.75.75 0 0 0 1.06-1.06L13.5 11.44V6Z" clipRule="evenodd" />
@@ -42,8 +41,6 @@ const CheckUpPackages = () => {
             category: 'vitamin',
             title: 'Comprehensive full body checkup with Vitamin D & B12',
             subtitle: 'Includes 11 Tests',
-            price: '$240.00',
-            oldPrice: '$80.00',
             discount: '20% Off',
             icon: (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10 text-pink-500">
@@ -57,8 +54,6 @@ const CheckUpPackages = () => {
             category: 'women-health',
             title: "Women's Staying Strong Health Checkup",
             subtitle: 'Includes 32 Tests',
-            price: '$300.00',
-            oldPrice: '$220.00',
             icon: (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10 text-pink-500">
                     <path d="M14.629 5.25a.75.75 0 0 0-.053-.153A8.995 8.995 0 0 0 12 3.75c-2.039 0-3.96 1.002-5.076 2.625.61.341 1.283.636 2.008.875a6.52 6.52 0 0 1-.749-.387L9.43 5.343a.75.75 0 0 1 .494.675v.982a.75.75 0 0 1-.75.75h-3.411a.75.75 0 0 1-.75-.75V6.02a.75.75 0 0 1-.168-.529 9.006 9.006 0 0 0-3.045 4.86c0 5.097 3.69 9.382 8.4 10.155.191.031.385.05.58.05h.001c.195 0 .388-.019.579-.049 4.71-1.073 8.4-5.059 8.4-10.156a9.007 9.007 0 0 0-3.044-4.86Z" />
@@ -73,8 +68,6 @@ const CheckUpPackages = () => {
             category: 'diabetes',
             title: 'Medi care Diabetes Screening',
             subtitle: 'Includes 07 Tests',
-            price: '$364.00',
-            oldPrice: '$80.00',
             discount: '20% Off',
             icon: (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10 text-pink-500">
@@ -87,8 +80,6 @@ const CheckUpPackages = () => {
             category: 'heart',
             title: 'Cardiac Health Assessment',
             subtitle: 'Includes 15 Tests',
-            price: '$500.00',
-            oldPrice: '$100.00',
             icon: (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10 text-pink-500">
                     <path d="m11.602 2.222 5.064 7.025-2.071 2.072a.75.75 0 0 0 0 1.06l3.89 3.89-1.06 1.061-3.89-3.89a.75.75 0 0 0-1.06 0l-2.072 2.072 7.025 5.064a.75.75 0 0 0 .945-1.164L13.116 16.91a.75.75 0 0 0-.91-.186l-2.074 1.037a.75.75 0 0 0-.585.603 3.501 3.501 0 0 1-2.015 2.158.75.75 0 0 0-.649.198l-1.06.852a.75.75 0 0 0-1.282-.572l-1.464-1.464a.75.75 0 0 0-1.164.945l5.064-7.025-2.071-2.072a.75.75 0 0 0 0-1.06l3.89-3.89 1.06 1.061 3.89 3.89a.75.75 0 0 0 1.06 0l2.072-2.072-7.025-5.064a.75.75 0 0 0-.945 1.164L10.884 7.09a.75.75 0 0 0 .91.186l2.074-1.037a.75.75 0 0 0 .585-.603A3.501 3.501 0 0 1 18.068 3.5a.75.75 0 0 0 .649-.198l1.06-.852a.75.75 0 0 0 1.282.572l1.464 1.464a.75.75 0 0 0 1.164-.945Z" />

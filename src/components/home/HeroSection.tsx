@@ -1,24 +1,32 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchHeroData, setCards } from '@/store/features/heroSlice';
+import axiosInstance from '@/lib/axios';
 
 const HeroSection = () => {
+  const dispatch = useDispatch();
   const [heroData, setHeroData] = useState(null);
-  console.log('heroData:', heroData);
+  const { heroImage, cards, status, error } = useSelector((state: RootState) => state.hero);
+
+  useEffect(() => {
+    dispatch(fetchHeroData());
+  }, [dispatch]);
 
   useEffect(() => {
     const fetchHeroData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/admin/herosection');
+        const response = await axiosInstance.get('/admin/herosection');
         setHeroData(response.data);
+        dispatch(setCards(response.data[0].cards));
       } catch (error) {
         console.error('Error fetching hero data:', error);
       }
     };
 
     fetchHeroData();
-  }, []);
+  }, [dispatch]);
 
   if (!heroData) {
     return <div>Loading...</div>; // Or any loading indicator
@@ -54,9 +62,9 @@ const HeroSection = () => {
 
         {/* right image */}
         <div className="flex-1 mt-10 md:mt-0 relative rounded-2xl">
-          {heroData.heroimage && (
+          {heroData[0]?.heroimage && (
             <Image
-              src={`data:image/jpeg;base64,${Buffer.from(heroData.heroimage).toString('base64')}`}
+              src={`data:image/jpeg;base64,${Buffer.from(heroData[0].heroimage).toString('base64')}`}
               alt="Hero Image"
               layout="fill"
               objectFit="cover"

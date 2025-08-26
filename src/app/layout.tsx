@@ -6,6 +6,7 @@ import AppPromo from "@/components/AppPromo";
 import Footer from "@/components/Footer";
 import FaqSection from "@/components/FaqSection";
 import ReviewSlider from "@/components/ReviewSlider";
+import StoreProvider from "@/app/StoreProvider";
 
 // database connection setup
 import "@/lib/initDb"; // will run dbConnect() when the app starts
@@ -39,8 +40,11 @@ export default function RootLayout({
         <div className="">
           <Toaster position="top-right" />
           <Header />
-          {children}
 
+          <StoreProvider>
+            {children}
+          </StoreProvider>
+          
           <ReviewSlider />
           <FaqSection />
           {/* <AppPromo /> */}
@@ -48,5 +52,5 @@ export default function RootLayout({
         </div>
       </body>
     </html>
-  );  
+  );
 }

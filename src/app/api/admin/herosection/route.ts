@@ -36,27 +36,35 @@ export async function POST(req: NextRequest) {
       cards.push({ title: cardTitle, image: cardImageBuffer });
     }
 
-    console.log(heroImageBuffer)
-    console.log(cards)
+    console.log(heroImageBuffer);
+    console.log(cards);
 
-    // ✅ Save to Mongo
-    const newHero = new Hero({
-      heroimage: heroImageBuffer,
-      cards,
-    });
-
-    await newHero.save();
+    // ✅ Find existing hero data or create new one
+    let hero = await Hero.findOne();
+    
+    if (hero) {
+      // Update existing record
+      hero.heroimage = heroImageBuffer;
+      hero.cards = cards;
+      await hero.save();
+    } else {
+      // Create new record
+      hero = new Hero({
+        heroimage: heroImageBuffer,
+        cards,
+      });
+      await hero.save();
+    }
 
     return NextResponse.json(
-      { message: "Hero saved successfully", hero: newHero },
-      { status: 201 }
+      { message: hero ? "Hero updated successfully" : "Hero created successfully", hero },
+      { status: 200 }
     );
   } catch (error) {
     console.error("Error saving hero data:", error);
     return NextResponse.json({ message: "Error saving hero data" }, { status: 500 });
   }
 }
-
 
 export async function GET() {
   try {

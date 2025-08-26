@@ -41,7 +41,7 @@ const HealthPackages = () => {
       subtitle: "BOOK NOW",
       priceLabel: "Start from",
       price: "$299.00",
-      img: "/senior.png", // replace with real images
+      img: "https://static.thenounproject.com/png/2292434-200.png", // replace with real images
       bg: "bg-yellow-200",
     },
     {
@@ -49,7 +49,7 @@ const HealthPackages = () => {
       subtitle: "BOOK NOW",
       priceLabel: "Flat",
       price: "$99.00",
-      img: "/diabetes.png",
+      img: "https://static.thenounproject.com/png/2292434-200.png",
       bg: "bg-teal-200",
     },
     {
@@ -57,7 +57,7 @@ const HealthPackages = () => {
       subtitle: "BOOK NOW",
       priceLabel: "10%",
       price: "Discount",
-      img: "/women.png",
+      img: "https://static.thenounproject.com/png/2292434-200.png",
       bg: "bg-amber-200",
     },
   ];
