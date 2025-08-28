@@ -1,33 +1,35 @@
+"use client"
 import Image from 'next/image';
-
-const services = [
-  {
-    title: 'Book Lab Tests',
-    bg: 'bg-yellow-300',
-    icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTWfKU53G_dKTqay0DwUdMIKDauowk5_Ruug&s'
-  },
-  {
-    title: 'Popular Health Checks',
-    bg: 'bg-orange-300',
-    icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTWfKU53G_dKTqay0DwUdMIKDauowk5_Ruug&s'
-  },
-  {
-    title: 'X-rays Scans & MRI',
-    bg: 'bg-pink-300',
-    icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTWfKU53G_dKTqay0DwUdMIKDauowk5_Ruug&s'
-  }
-];
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 const ServiceCards = () => {
+  const { cards } = useSelector((state: RootState) => state.hero);
+
+
+  const bgColors = ['#fef08a', '#fed7aa', '#fecaca']; // yellow, orange, pink in lighter shades
+
   return (
-    <div className=" mx-4 grid md:grid-cols-3 gap-6">
-      {services.map((s,i)=>(
-        <div key={i} className={`${s.bg} rounded-3xl p-6 flex justify-between items-center`}>          
-          <div>
-            <h3 className="text-lg font-medium mb-4">{s.title}</h3>
-            <button className="bg-black text-white w-8 h-8 flex items-center justify-center rounded-full">→</button>
+    <div className="mx-4 grid md:grid-cols-3 gap-4">
+      {cards.map((card, index) => (
+        <div 
+          key={index} 
+          className="rounded-2xl p-4 flex justify-between items-center"
+          style={{ backgroundColor: bgColors[index % 3] }}
+        >          
+          <div className="flex flex-col justify-between h-full">
+            <h3 className="text-base font-medium mb-2">{card.title}</h3>
+            <button className="bg-black text-white w-6 h-6 flex items-center justify-center rounded-full text-sm">→</button>
           </div>
-          <Image src={s.icon} alt={s.title} width={80} height={80} />
+          {card.image && (
+            <Image 
+              src={`data:image/jpeg;base64,${Buffer.from(card.image).toString('base64')}`}
+              alt={card.title}
+              width={70}
+              height={70}
+              className="rounded-full object-cover"
+            />
+          )}
         </div>
       ))}
     </div>

@@ -1,63 +1,62 @@
-"use client";
-import { useState } from "react";
+"use client"
+import { useState, useEffect } from "react";
 import Heading from "../Heading";
 import Link from "next/link";
+import axiosInstance from "@/lib/axios";
 
-const categories = [
-  "All tests",
-  "Affordable Packages",
-  "Diabetes",
-  "Heart",
-  "Cancer",
-  "Vitamin",
-  "Women Health",
-  "Skin care",
-  "Liver",
-  "Kidney",
-  "Stress",
-];
+interface ITab {
+  _id: string;
+  category: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
 
-const tests = [
-  {
-    name: "Complete Blood Count (CBC)",
-    oldPrice: "$260.00",
-    price: "$199.00",
-    description: "Measures various components of blood, including red and white blood cells, platelets, and hemoglobin."
-  },
-  {
-    name: "Blood Chemistry Panel",
-    oldPrice: "120.00",
-    price: "$99.00",
-    description: "Evaluates kidney and liver function, electrolyte balance, and screens for diabetes and other metabolic conditions."
-  },
-  {
-    name: "Urinalysis",
-    oldPrice: "$260.00",
-    price: "$199.00",
-    description: "Analyzes urine to detect various disorders, including urinary tract infections, kidney disease, and diabetes."
-  },
-  {
-    name: "Electrocardiogram (ECG)",
-    oldPrice: "$460.00",
-    price: "$399.00",
-    description: "Records the electrical activity of the heart to detect abnormalities in heart rhythm and structure."
-  },
-  {
-    name: "Chest X-Ray",
-    oldPrice: "$260.00",
-    price: "$199.00",
-    description: "Produces images of the chest to examine the lungs, heart, and chest wall for abnormalities or diseases."
-  },
-  {
-    name: "Magnetic Resonance Imaging (MRI)",
-    oldPrice: "$260.00",
-    price: "$169.00",
-    description: "Uses powerful magnets and radio waves to create detailed images of organs and structures within the body."
-  },
-];
+interface ITabCard {
+  _id: string;
+  title: string;
+  description: string;
+  url: string;
+  tabId: ITab; // Populated Tab object
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
 
 const BookLabTests = () => {
-  const [active, setActive] = useState("All tests");
+  const [tabs, setTabs] = useState<ITab[]>([]);
+  const [tabcards, setTabcards] = useState<ITabCard[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [activeCategory, setActiveCategory] = useState<string>("All tests");
+
+  useEffect(() => {
+    const fetchLabTests = async () => {
+      try {
+        const response = await axiosInstance.get("/admin/BookLabTests");
+        setTabs([{ _id: "all", category: "All tests", createdAt: "", updatedAt: "", __v: 0 }, ...response.data.tabs]);
+        setTabcards(response.data.tabcards);
+      } catch (err: any) {
+        setError(err.message || "Failed to fetch lab tests.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLabTests();
+  }, []);
+
+  const filteredTabcards = activeCategory === "All tests"
+    ? tabcards
+    : tabcards.filter(card => card.tabId.category === activeCategory);
+
+  if (loading) {
+    return <section className="max-w-7xl mx-auto px-4 md:px-8 py-10">Loading lab tests...</section>;
+  }
+
+  if (error) {
+    return <section className="max-w-7xl mx-auto px-4 md:px-8 py-10 text-red-500">Error: {error}</section>;
+  }
 
   return (
     <section className="max-w-7xl mx-auto px-4 md:px-8 py-10">
@@ -70,49 +69,47 @@ const BookLabTests = () => {
 
       {/* Filters */}
       <div className="flex gap-3 overflow-x-auto pb-4">
-        {categories.map((cat) => (
+        {tabs.map((tab) => (
           <button
-            key={cat}
-            onClick={() => setActive(cat)}
+            key={tab._id}
+            onClick={() => setActiveCategory(tab.category)}
             className={`px-4 py-2 text-sm rounded-full border whitespace-nowrap ${
-              active === cat
+              activeCategory === tab.category
                 ? "bg-black text-white"
                 : "bg-white text-black border-gray-300"
             }`}
           >
-            {cat}
+            {tab.category}
           </button>
         ))}
       </div>
 
       {/* Test List */}
       <div className="mt-6 divide-y divide-gray-200 border-t">
-        {tests.map((test, idx) => (
-          <div
-            key={idx}
-            className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-6 gap-4"
-          >
-            <div className="w-full sm:w-1/2">
-              <p className="font-medium">{test.name}</p>
-              <p className="text-sm text-gray-600 mt-1">{test.description} {" "}
-                <Link href={`/tests/${test.name.toLowerCase().replace(/\s+/g, '-')}`} className="text-blue-600 hover:underline">
-                  Read more
-                </Link>
-              </p>
+        {filteredTabcards.length > 0 ? (
+          filteredTabcards.map((tabcard) => (
+            <div
+              key={tabcard._id}
+              className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-6 gap-4"
+            >
+              <div className="w-full sm:w-1/2">
+                <p className="font-medium">{tabcard.title}</p>
+                <p className="text-sm text-gray-600 mt-1">{tabcard.description} {" "}
+                  {tabcard.url && (
+                    <Link href={tabcard.url} className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
+                      Read more
+                    </Link>
+                  )}
+                </p>
+              </div>
+              <div className="flex items-center gap-6 w-full sm:w-auto justify-between sm:justify-end">
+                {/* Add price/add button if needed */}
+              </div>
             </div>
-            <div className="flex items-center gap-6 w-full sm:w-auto justify-between sm:justify-end">
-              {/* <p className="text-right">
-                <span className="line-through text-gray-400 mr-2">
-                  {test.oldPrice}
-                </span>
-                <span className="font-bold text-lg">{test.price}</span>
-              </p>
-              <button className="px-6 py-2 border border-black rounded-full">
-                Add
-              </button> */}
-            </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p className="text-center py-10 text-gray-500">No lab tests found for this category.</p>
+        )}
       </div>
     </section>
   );

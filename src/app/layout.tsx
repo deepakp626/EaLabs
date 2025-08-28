@@ -6,6 +6,11 @@ import AppPromo from "@/components/AppPromo";
 import Footer from "@/components/Footer";
 import FaqSection from "@/components/FaqSection";
 import ReviewSlider from "@/components/ReviewSlider";
+import StoreProvider from "@/app/StoreProvider";
+
+// database connection setup
+import "@/lib/initDb"; // will run dbConnect() when the app starts
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,9 +38,13 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased mb-4`}
       >
         <div className="">
+          <Toaster position="top-right" />
           <Header />
-          {children}
 
+          <StoreProvider>
+            {children}
+          </StoreProvider>
+          
           <ReviewSlider />
           <FaqSection />
           {/* <AppPromo /> */}
@@ -43,5 +52,5 @@ export default function RootLayout({
         </div>
       </body>
     </html>
-  );  
+  );
 }

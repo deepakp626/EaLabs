@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -8,32 +8,39 @@ import "swiper/css/autoplay";
 import Image from "next/image";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import Heading from "./Heading";
-
-const reviews = [
-  {
-    name: "Esther Howard",
-    role: "Patient",
-    image: "https://randomuser.me/api/portraits/women/1.jpg",
-    text: "I had a great experience at this healthcare clinic. I was seen quickly, and the doctor was able to diagnose and treat my condition.",
-  },
-  {
-    name: "Darlene Robertson",
-    role: "Patient",
-    image: "https://randomuser.me/api/portraits/women/45.jpg",
-    text: "The service was excellent and the blood test collection was very smooth.",
-  },
-  {
-    name: "Ronald Richards",
-    role: "Patient",
-    image: "https://randomuser.me/api/portraits/men/92.jpg",
-    text: "Very convenient and accurate diagnosis. Would highly recommend to others!",
-  },
-];
+import axiosInstance from "@/lib/axios";
 
 const ReviewSlider = () => {
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    const getReviews = async () => {
+      try {
+        const response = await axiosInstance.get("/admin/reviews");
+        setReviews(response.data.data);
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      }
+    };
+
+    getReviews();
+  }, []);
+
+  function bufferToBase64(buffer: Buffer | Uint8Array): string {
+    if (!buffer) return '';
+
+    // Ensure it's a Buffer
+    const buf = Buffer.isBuffer(buffer) ? buffer : Buffer.from(buffer);
+
+    return buf.toString('base64');
+  }
+
   return (
     <div className="max-w-7xl mx-auto py-16">
-      <Heading title="Our doctors and clinics have earned over 5,000+ reviews on Google!" align="center" />
+      <Heading
+        title="Our doctors and clinics have earned over 5,000+ reviews on Google!"
+        align="center"
+      />
 
       {/* Rating Stars */}
       <div className="flex justify-center items-center gap-1 mb-2">
@@ -63,22 +70,22 @@ const ReviewSlider = () => {
             <SwiperSlide key={index}>
               <div className="rounded-3xl border border-gray-200 px-10 py-8 cursor-default">
                 <div className="flex gap-6 items-start">
-                  <div className="flex flex-col items-center gap-1">
-                    <Image
-                      src={review.image}
-                      alt={review.name}
-                      width={64}
-                      height={64}
-                      className="rounded-full object-cover"
-                    />
-                    <div className="text-sm font-semibold text-neutral-black">
-                      {review.name}
+                  <div className="flex flex-col items-center h-20 w-22 gap-1">
+                    <div className="relative h-full w-full">
+                      <Image
+                        src={`data:image/jpeg;base64,${bufferToBase64(review.image)}`}
+                        alt={review.userName}
+                        fill
+                        className="rounded-full object-cover"
+                      />
                     </div>
-                    <div className="text-xs text-neutral-gray">{review.role}</div>
+                    <div className="text-sm font-semibold text-neutral-black">
+                      {review.userName}
+                    </div>
                   </div>
 
                   <p className="text-lg font-medium text-neutral-black leading-relaxed">
-                    {review.text}
+                    {review.userReview}
                   </p>
                 </div>
               </div>
@@ -91,3 +98,4 @@ const ReviewSlider = () => {
 };
 
 export default ReviewSlider;
+
