@@ -1,10 +1,9 @@
 "use client"
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Heading from '../Heading';
 import Image from "next/image";
 import Link from 'next/link';
-
-
+import axiosInstance from '@/lib/axios'; // Make sure this import is correct
 
 type CardProps = {
   imageUrl: string;
@@ -14,16 +13,16 @@ type CardProps = {
 // Component for a single card
 const Card = ({ imageUrl, label } : CardProps) => {
   return (
-    <Link href={`/tests/${label.toLowerCase()}`} className="flex flex-col items-center justify-center p-4 cursor-pointer hover:bg-gray-100 rounded-lg transition duration-300">
+    <Link href={`/tests/${label.toLowerCase()}`} className="flex flex-col items-center justify-center p-4 cursor-pointer bg-gray-50 rounded-lg transition duration-300 shadow-md hover:shadow-lg hover:bg-gray-100">
       {/* Container for the circular icon with a gradient background */}
-      <div className="relative flex items-center justify-center w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-gradient-to-r from-gray-50 to-white shadow-inner">
+      <div className="relative w-24 h-24 sm:w-25 sm:h-25 rounded-full bg-gradient-to-r from-gray-50 to-white shadow-inner overflow-hidden hover:shadow-lg hover:bg-gray-100">
         {/* The icon itself, rendered as an Image */}
         <Image
           src={imageUrl}
           alt={label}
-          width={64}
-          height={64}
-          className="w-16 h-16 sm:w-20 sm:h-20"
+          layout="fill"
+          objectFit="cover"
+          className="rounded-full"
         />
       </div>
       {/* The label for the card */}
@@ -102,22 +101,40 @@ const HealthPackages = () => {
 
 // Main App component to display the cards
 const TestsByHealth = () => {
-  // Define the card data with labels
-  const cardsData = [
-    { label: 'Liver', imageUrl: "https://static.thenounproject.com/png/2292434-200.png" },
-    { label: 'Blood', imageUrl: "https://static.thenounproject.com/png/2292434-200.png" },
-    { label: 'Backpain', imageUrl: "https://static.thenounproject.com/png/2292434-200.png" },
-    { label: 'Kidneys', imageUrl: "https://static.thenounproject.com/png/2292434-200.png" },
-    { label: 'Orthopaedics', imageUrl: "https://static.thenounproject.com/png/2292434-200.png" },
-    { label: 'Senior Citizen', imageUrl: "https://static.thenounproject.com/png/2292434-200.png" },
-     { label: 'Senior Citizen', imageUrl: "https://static.thenounproject.com/png/2292434-200.png" },
-      { label: 'Senior Citizen', imageUrl: "https://static.thenounproject.com/png/2292434-200.png" },
-       { label: 'Senior Citizen', imageUrl: "https://static.thenounproject.com/png/2292434-200.png" },
-        { label: 'Senior Citizen', imageUrl: "https://static.thenounproject.com/png/2292434-200.png" },
-  ];
+  const [cardsData, setCardsData] = useState<CardProps[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchHealthConcerns = async () => {
+      try {
+        const response = await axiosInstance.get('/admin/healthconcerns');
+        const fetchedData = response.data.map((item: any) => ({
+          label: item.title,
+          imageUrl: `data:image/jpeg;base64,${item.image}` // Assuming the image is returned as base64
+        }));
+        setCardsData(fetchedData);
+        setIsLoading(false);
+      } catch (err) {
+        console.error('Error fetching health concerns:', err);
+        setError('Failed to load health concerns. Please try again later.');
+        setIsLoading(false);
+      }
+    };
+
+    fetchHealthConcerns();
+  }, []);
+
+  if (isLoading) {
+    return <div className="text-center py-10">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center py-10 text-red-500">{error}</div>;
+  }
 
   return (
-    <div className="max-w-7xl  mx-3 md:mx-auto">
+    <div className="max-w-7xl mx-3 md:mx-auto">
       <div className="mx-auto">
         <Heading title="Find Tests by Health concern" align='center' />
         <div className="flex flex-row gap-6 justify-items-center overflow-auto">

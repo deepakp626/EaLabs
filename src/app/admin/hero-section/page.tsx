@@ -13,8 +13,6 @@ const HeroSectionForm = () => {
     { title: '', image: null as File | null },
   ]);
 
-  console.log('heroImage --:', heroImage);
-  console.log('cards --:', cards);
 
   // 🔹 Compress and set hero image
   const handleHeroImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,9 +69,9 @@ const HeroSectionForm = () => {
       }
     });
 
-    for (const [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
+    // for (const [key, value] of formData.entries()) {
+    //   console.log(key, value);
+    // }
 
     try {
       const response = await axiosInstance.post('/admin/herosection', formData, {

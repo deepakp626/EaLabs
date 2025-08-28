@@ -54,7 +54,6 @@ export const saveCheckupPackages = createAsyncThunk(
       cards: cardsWithBase64Images
     });
 
-    console.log('Data to save:', jsonPayload);
 
     const response = await axiosInstance.post('/admin/checkup-packages', jsonPayload, {
       headers: {
@@ -118,7 +117,7 @@ const checkupPackagesSlice = createSlice({
       })
       .addCase(saveCheckupPackages.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        console.log('Response from server:', action.payload);
+        // console.log('Response from server:', action.payload);
         // Optionally update state with the response from the server
         state.categories = action.payload.data.categories;
         state.cards = action.payload.data.cards;

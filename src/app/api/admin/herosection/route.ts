@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import Hero from '@/model/heroModel';
+import Hero from '@/models/heroModel';
 
 async function fileToBuffer(file: File): Promise<Buffer> {
   const arrayBuffer = await file.arrayBuffer();
@@ -8,7 +8,6 @@ async function fileToBuffer(file: File): Promise<Buffer> {
 
 export async function POST(req: NextRequest) {
   try {
-    console.log("POST request received");
 
     const formData = await req.formData();
 
@@ -36,8 +35,6 @@ export async function POST(req: NextRequest) {
       cards.push({ title: cardTitle, image: cardImageBuffer });
     }
 
-    console.log(heroImageBuffer);
-    console.log(cards);
 
     // ✅ Find existing hero data or create new one
     let hero = await Hero.findOne();

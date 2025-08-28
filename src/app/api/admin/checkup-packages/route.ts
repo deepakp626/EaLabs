@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { CheckupPackage } from "@/model/CheckupPackage";
+import { CheckupPackage } from "@/models/CheckupPackage";
 
 // Get all checkup packages
 export async function GET() {
@@ -25,8 +25,6 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { categories, cards } = body;
-    console.log(categories, cards)
-    console.log(typeof categories, typeof cards)
 
     if (!categories || !cards) {
       return NextResponse.json({ error: "Missing data" }, { status: 400 });

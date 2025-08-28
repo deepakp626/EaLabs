@@ -151,8 +151,8 @@ const CheckupPackagesPage = () => {
   }, [categories, cards]);
 
   const handleSubmit = async () => {
-    console.log('Categories to save:', localCategories);
-    console.log('Cards to save:', localCards);
+    // console.log('Categories to save:', localCategories);
+    // console.log('Cards to save:', localCards);
 
     try {
       await dispatch(saveCheckupPackages({ categories: localCategories, cards: localCards })).unwrap();

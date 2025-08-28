@@ -2,11 +2,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 import heroReducer from './features/heroSlice'; // Example slice
 import checkupPackagesReducer from './features/checkupPackagesSlice'; // Example slice
+import reviewsReducer from '@/store/features/reviewSlice'; // Example slice
+
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       hero: heroReducer,
+      reviews: reviewsReducer,
       checkupPackages: checkupPackagesReducer,
       // Add other slices here
     },
