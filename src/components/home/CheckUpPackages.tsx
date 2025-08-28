@@ -1,130 +1,251 @@
-"use client"
-import React, { useEffect, useState } from 'react';
-import Heading from '@/components/Heading';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
-import Image from 'next/image';
-import axiosInstance from '@/lib/axios';
+// components/TestTabs.tsx
+"use client";
+import { useState } from "react";
+import Heading from "../Heading";
 
-// Main App component which contains the entire tab section UI
-const CheckUpPackages = () => {
-    const dispatch = useDispatch();
-    const [categories, setCategories] = useState<string[]>([]);
-    const [cards, setCards] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+const categories = [
+  { id: "heart", label: "Heart", icon: "❤️" },
+  { id: "liver", label: "Liver", icon: "🫀" },
+  { id: "vitamins", label: "Vitamins", icon: "💊" },
+  { id: "diabetes", label: "Diabetes", icon: "🧪" },
+  { id: "thyroid", label: "Thyroid", icon: "🦋" },
+  { id: "allergy", label: "Allergy", icon: "🤧" },
+];
 
-    // Use state to keep track of the currently active tab
-    const [activeTab, setActiveTab] = useState('all-tests');
+const testData = {
+  thyroid: [
+    {
+      title: "Thyroid Basic (TSH)",
+      desc: "Quick check of thyroid-stimulating hormone for dose follow-up.",
+      includes: "TSH",
+      for: "Routine monitoring, Dosage adjustment",
+      reports: "18 hours",
+      price: "599/-",
+    },
+    {
+      title: "Thyroid Profile (T3, T4, TSH)",
+      desc: "Complete thyroid evaluation to check for hypo/hyperthyroidism.",
+      includes: "T3, T4, TSH",
+      for: "Thyroid disorders, Routine health check",
+      reports: "24 hours",
+      price: "999/-",
+    },
+    {
+      title: "Advanced Thyroid Panel",
+      desc: "Comprehensive thyroid test including antibodies for autoimmunity.",
+      includes: "T3, T4, TSH, Anti-TPO, Anti-TG",
+      for: "Thyroid disease diagnosis, Autoimmune conditions",
+      reports: "36 hours",
+      price: "1999/-",
+    },
+  ],
 
-    useEffect(() => {
-        const fetchCheckupPackages = async () => {
-            try {
-                setLoading(true);
-                const response = await axiosInstance.get('/admin/checkup-packages');
-                setCategories(response.data.categories || []);
-                setCards(response.data.cards || []);
-                setLoading(false);
-            } catch (err) {
-                setError('Failed to fetch checkup packages');
-                setLoading(false);
-                console.error('Error fetching checkup packages:', err);
-            }
-        };
+  heart: [
+    {
+      title: "Lipid Profile",
+      desc: "Measures cholesterol and triglycerides for heart health.",
+      includes: "Total Cholesterol, HDL, LDL, Triglycerides",
+      for: "Cardiac risk assessment",
+      reports: "18 hours",
+      price: "799/-",
+    },
+    {
+      title: "Cardiac Risk Markers",
+      desc: "Advanced heart risk check including hs-CRP and Lipoprotein(a).",
+      includes: "hs-CRP, Homocysteine, Apolipoprotein A1, B",
+      for: "Heart disease risk monitoring",
+      reports: "36 hours",
+      price: "2499/-",
+    },
+  ],
 
-        fetchCheckupPackages();
-    }, []);
+  liver: [
+    {
+      title: "Liver Function Test (LFT)",
+      desc: "Basic screening of liver enzymes and proteins.",
+      includes: "SGPT, SGOT, ALP, Bilirubin, Albumin",
+      for: "Liver health, Jaundice, Alcohol/liver disorder check",
+      reports: "24 hours",
+      price: "699/-",
+    },
+    {
+      title: "Comprehensive Liver Panel",
+      desc: "Detailed liver health check for chronic conditions.",
+      includes: "LFT, GGT, LDH, Prothrombin Time",
+      for: "Chronic liver disease, Fatty liver",
+      reports: "36 hours",
+      price: "1499/-",
+    },
+  ],
 
-    // Use categories from API response, with a default "All tests" option
-    const tabs = [
-        { id: 'all-tests', name: 'All tests' },
-        ...(categories || []).map(category => ({ id: category, name: category }))
-    ];
+  vitamins: [
+    {
+      title: "Vitamin D Test",
+      desc: "Checks vitamin D levels for bone and immune health.",
+      includes: "25-OH Vitamin D",
+      for: "Bone weakness, Fatigue, Vitamin deficiency",
+      reports: "24 hours",
+      price: "899/-",
+    },
+    {
+      title: "Vitamin B12 Test",
+      desc: "Measures vitamin B12 levels crucial for nerve health.",
+      includes: "Vitamin B12",
+      for: "Weakness, Memory loss, Anemia",
+      reports: "18 hours",
+      price: "699/-",
+    },
+    {
+      title: "Vitamin Screening Package",
+      desc: "Covers multiple vitamin deficiencies in one go.",
+      includes: "Vitamin A, B12, D, E, K",
+      for: "General wellness, Nutritional deficiency",
+      reports: "36 hours",
+      price: "2499/-",
+    },
+  ],
 
-    // Filter the cards based on the active tab
-    const filteredCards = activeTab === 'all-tests'
-        ? cards
-        : cards.filter(card => card.category === activeTab);
+  diabetes: [
+    {
+      title: "Blood Sugar (Fasting & PP)",
+      desc: "Basic blood glucose measurement for diabetes check.",
+      includes: "Fasting Blood Sugar, Postprandial Sugar",
+      for: "Diabetes screening, Routine monitoring",
+      reports: "6 hours",
+      price: "299/-",
+    },
+    {
+      title: "HbA1c Test",
+      desc: "3-month average blood sugar monitoring.",
+      includes: "HbA1c (Glycated Hemoglobin)",
+      for: "Diabetes control check",
+      reports: "12 hours",
+      price: "499/-",
+    },
+    {
+      title: "Diabetes Package",
+      desc: "Complete diabetes evaluation with sugar and kidney markers.",
+      includes: "FBS, PPBS, HbA1c, Urine Microalbumin",
+      for: "Diabetes management and complication screening",
+      reports: "24 hours",
+      price: "1299/-",
+    },
+  ],
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+  allergy: [
+    {
+      title: "Food Allergy Panel",
+      desc: "Detects allergies to common food items.",
+      includes: "Milk, Egg, Wheat, Soy, Peanut, Seafood",
+      for: "Food allergy symptoms, Digestive issues",
+      reports: "3 days",
+      price: "3999/-",
+    },
+    {
+      title: "Respiratory Allergy Panel",
+      desc: "Checks allergies from dust, pollen, mites, and mold.",
+      includes: "Dust Mites, Pollen, Mold, Animal Dander",
+      for: "Asthma, Seasonal allergy",
+      reports: "3 days",
+      price: "3499/-",
+    },
+    {
+      title: "Comprehensive Allergy Package",
+      desc: "Covers 50+ allergens including food & environment.",
+      includes: "Food + Respiratory allergens",
+      for: "Chronic allergy sufferers",
+      reports: "5 days",
+      price: "6999/-",
+    },
+  ],
+};
 
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
 
-    return (
-        <div className="max-w-7xl mx-3 md:mx-auto bg-white py-6 md:py-12 lg:py-20 font-sans">
-            <div className="flex flex-col">
-                <Heading title="Featured Health Check-Up Packages" align='center' />
+export default function TestTabs() {
+  const [activeTab, setActiveTab] = useState("thyroid");
 
-                {/* Tab section */}
-                <div className="overflow-hidden">
-                    <div className="flex justify-start overflow-x-auto gap-4 p-2 md:p-4 lg:p-6 mb-8 lg:mb-12">
-                        {tabs.map((tab) => (
-                            <button
-                                key={tab.id}
-                                className={`flex-shrink-0 px-6 py-2.5 text-sm md:text-base lg:text-lg font-medium rounded-full transition-colors duration-200 ease-in-out ${
-                                    activeTab === tab.id
-                                        ? 'bg-black text-white'
-                                        : 'bg-white text-gray-700 border border-gray-300'
-                                }`}
-                                onClick={() => setActiveTab(tab.id)}
-                            >
-                                {tab.name}
-                            </button>
-                        ))}
-                    </div>
+    //   useEffect(() => {
+    //     const fetchCheckupPackages = async () => {
+    //         try {
+    //             setLoading(true);
+    //             const response = await axiosInstance.get('/admin/checkup-packages');
+    //             setCategories(response.data.categories || []);
+    //             setCards(response.data.cards || []);
+    //             setLoading(false);
+    //         } catch (err) {
+    //             setError('Failed to fetch checkup packages');
+    //             setLoading(false);
+    //             console.error('Error fetching checkup packages:', err);
+    //         }
+    //     };
+
+    //     fetchCheckupPackages();
+    // }, []);
+
+  return (
+    <section className=" bg-[rgb(247,245,255)]">
+
+    <div className="max-w-7xl mx-auto p-12 my-22">
+      <Heading title="Checkup Packages" align="left" />  
+      {/* Tabs */}
+      <div className="flex flex-wrap justify-start gap-4 mb-6">
+        {categories.map((cat) => (
+          <button
+            key={cat.id}
+            onClick={() => setActiveTab(cat.id)}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition ${
+              activeTab === cat.id
+                ? "bg-red-500 text-white border-red-500"
+                : "border-gray-300 text-gray-700 hover:bg-gray-100"
+            }`}
+          >
+            <span>{cat.icon}</span>
+            {cat.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Cards */}
+      <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6">
+        {testData[activeTab]?.map((test, idx) => (
+          <div
+            key={idx}
+            className="bg-white rounded-2xl border shadow-md p-6 flex flex-col justify-between"
+          >
+            <div>
+              <h2 className="text-red-600 font-bold text-lg">
+                {test.title}
+              </h2>
+              <p className="text-gray-600 text-sm mt-2">{test.desc}</p>
+
+              <div className="border-t my-3"></div>
+
+              <div className="flex gap-4 text-sm">
+                <div>
+                  <p className="font-semibold text-blue-600">Includes:</p>
+                  <p>{test.includes}</p>
                 </div>
-
-                {/* Product grid section */}
-                <div className="flex gap-6 md:gap-8 lg:gap-12 overflow-x-auto w-full py-4 no-scrollbar">
-                    {filteredCards.length > 0 ? (
-                        filteredCards.map((card) => (
-                            <div key={card._id} className="relative flex-shrink-0 w-[280px] bg-white rounded-2xl p-6 md:p-8 flex flex-col justify-between shadow-lg transition-transform duration-200 ease-in-out hover:scale-105">
-                                {/* Product icon */}
-                                <div className="flex justify-center mb-6">
-                                    {card.image?.data && (
-                                        <div className="relative w-20 h-20 rounded-full overflow-hidden">
-                                            <Image
-                                                src={`data:image/jpeg;base64,${Buffer.from(card.image).toString("base64")}`}
-                                                alt={card.title}
-                                                fill
-                                                className="object-cover"
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-
-                                {/* Discount badge */}
-                                {card.discount && (
-                                    <div className="absolute top-4 right-4 bg-yellow-300 text-gray-800 text-xs font-semibold px-2.5 py-1 rounded-full">
-                                        {card.discount}
-                                    </div>
-                                )}
-
-                                {/* Product details */}
-                                <div className="text-center mb-4">
-                                    <h3 className="text-base md:text-lg font-semibold text-gray-800 leading-tight mb-1">{card.title}</h3>
-                                    <p className="text-sm text-gray-500">Includes {card.testCount} Tests</p>
-                                </div>
-
-                                {/* Price and Add button */}
-                                <div className="flex flex-col xl:flex-row items-center justify-center gap-4">
-                                    <button className="w-full px-6 py-2 bg-blue-100 text-blue-500 rounded-lg text-sm font-semibold transition-colors duration-200 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-                                        Add
-                                    </button>
-                                </div>
-                            </div>
-                        ))
-                    ) : (
-                        <p className="w-full text-center text-gray-500 mt-10">No packages found for this category.</p>
-                    )}
+                <div>
+                  <p className="font-semibold text-blue-600">For</p>
+                  <p>{test.for}</p>
                 </div>
+              </div>
+
+              <p className="text-gray-700 mt-3">
+                Reports in <span className="font-bold text-blue-600">{test.reports}</span>
+              </p>
             </div>
-        </div>
-    );
-}
 
-export default CheckUpPackages;
+            <div className="mt-4 flex justify-between items-center">
+              <span className="font-bold text-red-600 text-lg">{test.price}</span>
+              <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+                Book a test →
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+    </section>
+  );
+}

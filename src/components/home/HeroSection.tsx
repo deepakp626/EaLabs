@@ -4,10 +4,12 @@ import Image from 'next/image';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchHeroData, setCards } from '@/store/features/heroSlice';
 import axiosInstance from '@/lib/axios';
+import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
 
 const HeroSection = () => {
   const dispatch = useDispatch();
   const [heroData, setHeroData] = useState(null);
+  const [activeTab, setActiveTab] = useState("About Ea Labs"); // State for the active tab
   const { heroImage, cards, status, error } = useSelector((state: RootState) => state.hero);
 
   useEffect(() => {
@@ -28,49 +30,74 @@ const HeroSection = () => {
     fetchHeroData();
   }, [dispatch]);
 
+  // Tab content mapping
+  const tabContent = {
+    "About Ea Labs": {
+      title: "Welcome to EA Labs",
+      description: "We provide precision diagnostics and care you can trust."
+    },
+    "Test we offer": {
+      title: "Our Testing Services",
+      description: "Offering a wide range of pathology and allergy testing options."
+    },
+    "Recognitions": {
+      title: "Recognized Excellence",
+      description: "We are proud of our achievements in the medical community."
+    },
+    "Our Blogs": {
+      title: "Insights and Updates",
+      description: "Stay updated with our latest news and informative articles."
+    }
+  };
+
   if (!heroData) {
     return <div>Loading...</div>; // Or any loading indicator
   }
 
   return (
-    <section className="mx-6 bg-[#ADE9E6] rounded-3xl py-16 px-6 md:px-20 overflow-hidden mt-4">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row ">
-        {/* left text */}
-        <div className="flex-1 space-y-8 md:pr-4">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900">
-            Family body <br />
-            checkup package <br />
-            <span>Now at $199</span>
-          </h1>
+    <section
+      className="relative w-full h-[80vh] flex flex-col justify-between bg-cover bg-center mt-5"
+      style={{
+        backgroundImage:
+          "url('https://images.pexels.com/photos/1563356/pexels-photo-1563356.jpeg?cs=srgb&dl=pexels-thatguycraig000-1563356.jpg&fm=jpg')", // 🔹 Replace with backend image URL
+      }}
+    >
+      {/* Navbar */}
+      <header className="flex justify-between items-center px-8 py-4 bg-white/80 backdrop-blur-md">
+        {/* Tabs */}
+        <nav className="flex space-x-8 text-gray-800 font-light">
+          {Object.keys(tabContent).map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`hover:text-red-500 ${activeTab === tab ? 'font-bold' : ''}`}
+            >
+              {tab}
+            </button>
+          ))}
+        </nav>
 
-          <div className="flex flex-col sm:flex-row sm:space-x-8 space-y-4 sm:space-y-0">
-            <div className="flex items-center space-x-2">
-              <span className="text-xl">✔</span>
-              <p>Full body checkup with cancer</p>
-            </div>
-            <div className="flex items-center space-x-2">
-              <span className="text-xl">✔</span>
-              <p>Free home sample pickup</p>
-            </div>
-          </div>
-
-          <button className="mt-6 bg-gray-900 w-fit text-white text-lg font-medium rounded-full px-8 py-4 flex items-center space-x-2 hover:bg-gray-800 transition">
-            <span>Book now</span>
-            <span>→</span>
-          </button>
+        {/* Social Media Icons */}
+        <div className="flex space-x-4 text-xl text-gray-700">
+          <a href="#"><FaInstagram className="hover:text-pink-500" /></a>
+          <a href="#"><FaFacebookF className="hover:text-blue-600" /></a>
+          <a href="#"><FaYoutube className="hover:text-red-600" /></a>
         </div>
+      </header>
 
-        {/* right image */}
-        <div className="flex-1 mt-10 md:mt-0 relative rounded-2xl">
-          {heroData[0]?.heroimage && (
-            <Image
-              src={`data:image/jpeg;base64,${Buffer.from(heroData[0].heroimage).toString('base64')}`}
-              alt="Hero Image"
-              layout="fill"
-              objectFit="cover"
-              className="rounded-2xl"
-            />
-          )}
+      {/* Hero Content */}
+      <div className="flex items-center justify-center md:justify-end h-full px-10 md:px-20">
+        <div className="max-w-xl text-center md:text-left text-white">
+          <h1 className="text-3xl md:text-5xl font-semibold leading-snug">
+            {tabContent[activeTab].title}
+          </h1>
+          <p className="mt-4 text-lg md:text-xl text-gray-200">
+            {tabContent[activeTab].description}
+          </p>
+
+          <button className="mt-6 inline-flex items-center px-6 py-3 bg-white text-blue-600 rounded-full shadow-md font-medium hover:bg-gray-200 transition">
+            Book a test →
+          </button>
         </div>
       </div>
     </section>
