@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Check if a checkup package already exists
-    let existingPackage = await CheckupPackage.findOne();
+    const existingPackage = await CheckupPackage.findOne();
 
     if (existingPackage) {
       // Update existing package
