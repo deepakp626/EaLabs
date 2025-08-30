@@ -3,11 +3,15 @@ import {
   FaTwitter,
   FaFacebookF,
 } from "react-icons/fa";
+import { MapPin, Phone, Mail } from "lucide-react";
 import Image from "next/image";
 import Logo from '../../public/logo.png'
+import Link from "next/link";
+
 
 const Footer = () => {
   return (
+    <>
     <footer className="bg-[#1E1E1C] px-4 md:px-12 pt-14 pb-4 rounded-[30px] mt-8">
       {/* Top white rounded section */}
       <div className="bg-white rounded-[30px] px-6 md:px-12 py-12">
@@ -83,17 +87,62 @@ const Footer = () => {
       </div>
 
       {/* Large brand block */}
-      <div className="mt-8 bg-[#A6DBD8] rounded-[30px] py-12 flex justify-center items-center">
-        <div className="flex items-center gap-4">
+      <div className="mt-8 bg-[#A6DBD8] rounded-[30px] py-12 ">
+        <div className="flex items-center flex-col gap-8">
           <div className="">
-            <Image 
+            <Image
               src={Logo}
               height={300}
               width={300}
               alt="logo"
             />
           </div>
+
+          {/* bg-gradient-to-r from-indigo-50 to-purple-50 */}
+          <div className="w-full  py-6">
+            <div className=" mx-auto flex flex-col md:flex-row justify-center items-center gap-10 text-center md:text-left">
+
+              {/* Address */}
+              <div className="flex items-start gap-3 max-w-sm">
+                <MapPin className="w-6 h-6 text-red-500 shrink-0 mt-1" />
+                <p className="text-blue-900 leading-relaxed">
+                  108, Westface, Hebatpur Rd, <br />
+                  near Baghban Party Plot, Thaltej, <br />
+                  Ahmedabad, Gujarat 380059
+                </p>
+              </div>
+
+              {/* Divider */}
+              <div className="hidden md:block w-px h-12 bg-red-500" />
+
+              {/* Phone */}
+              <div className="flex items-center gap-3">
+                <Phone className="w-6 h-6 text-red-500" />
+                <a
+                  href="tel:9099045241"
+                  className="text-blue-900 hover:underline font-medium"
+                >
+                  9099045241
+                </a>
+              </div>
+
+              {/* Divider */}
+              <div className="hidden md:block w-px h-12 bg-red-500" />
+
+              {/* Email */}
+              <div className="flex items-center gap-3">
+                <Mail className="w-6 h-6 text-red-500" />
+                <a
+                  href="mailto:endoallergy@yahoo.com"
+                  className="text-blue-900 hover:underline font-medium"
+                  >
+                  endoallergy@yahoo.com
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
+
       </div>
 
       {/* Bottom bar */}
@@ -101,7 +150,34 @@ const Footer = () => {
         <span>©2022 Medicare</span>
         <span>Design & Developed by MUSEMIND</span>
       </div>
+
+
+
     </footer>
+          <div className="w-full bg-[#150086] py-4 flex flex-col md:flex-row justify-between items-center text-white text-sm px-4">
+        
+        {/* Left Section */}
+        <p className="mb-2 md:mb-0">
+          Developed by{" "}
+          <span className="font-bold">Antinoob Solutions</span>
+        </p>
+
+        {/* Right Section */}
+        <div className="flex gap-3 md:gap-5">
+          <Link href="/privacy-policy" className="hover:underline">
+            Privacy Policy
+          </Link>
+          <span>|</span>
+          <Link href="/user-policy" className="hover:underline">
+            User Policy
+          </Link>
+          <span>|</span>
+          <Link href="/terms-conditions" className="hover:underline">
+            Terms & Condition
+          </Link>
+        </div>
+      </div>
+    </>
   );
 };
 

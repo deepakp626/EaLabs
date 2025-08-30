@@ -7,19 +7,19 @@ const healthCheckups = {
     {
       title: "Starter Wellness",
       age: "Under 30 yrs",
-      img: "/images/men1.png",
+      img: "https://static.thenounproject.com/png/2292434-200.png",
       bg: "from-orange-500 to-red-400",
     },
     {
       title: "Active Life Check",
       age: "30–45 yrs",
-      img: "/images/men2.png",
+      img: "https://static.thenounproject.com/png/2292434-200.png",
       bg: "from-pink-500 to-purple-500",
     },
     {
       title: "Advanced Risk Screen",
       age: "45–60 yrs",
-      img: "/images/men3.png",
+      img: "https://static.thenounproject.com/png/2292434-200.png",
       bg: "from-cyan-400 to-green-300",
     },
   ],
@@ -27,39 +27,39 @@ const healthCheckups = {
     {
       title: "Energy & Immunity",
       age: "Under 30 yrs",
-      img: "/images/women1.png",
+      img: "https://static.thenounproject.com/png/2292434-200.png",
       bg: "from-lime-400 to-green-300",
     },
     {
       title: "Hormone & Metabolic Balance",
       age: "30–45 yrs",
-      img: "/images/women2.png",
+      img: "https://static.thenounproject.com/png/2292434-200.png",
       bg: "from-purple-400 to-pink-400",
     },
     {
       title: "Midlife Health Check",
       age: "45–60 yrs",
-      img: "/images/women3.png",
+      img: "https://static.thenounproject.com/png/2292434-200.png",
       bg: "from-yellow-400 to-orange-300",
     },
   ],
 };
 
-export default function HealthCheckups() {
+const  HealthCheckups =() => {
   return (
     <section className="px-6 py-12 bg-white">
       {/* Top heading */}
-      <div className="text-center mb-12">
+      <div className="text-center mb-18">
         <h2 className="text-3xl font-bold">
           <span className="text-red-500">3-Level Quality Control</span>{" "}
           <span className="text-indigo-900">on Every Batch.</span>
         </h2>
       </div>
 
-      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12">
+      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 my-32">
         {/* Men Section */}
         <div>
-          <h3 className="text-xl font-semibold text-indigo-900 mb-6">
+          <h3 className="text-xl font-bold text-indigo-900 mb-6 ml-6">
             Routine health checkups for men
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -92,7 +92,7 @@ export default function HealthCheckups() {
 
         {/* Women Section */}
         <div>
-          <h3 className="text-xl font-semibold text-indigo-900 mb-6">
+          <h3 className="text-xl font-bold text-indigo-900 mb-6 ml-6">
             Routine health checkups for women
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -126,3 +126,6 @@ export default function HealthCheckups() {
     </section>
   );
 }
+
+
+export default HealthCheckups;

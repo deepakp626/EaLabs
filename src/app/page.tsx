@@ -8,7 +8,12 @@ import CallToAction from "@/components/CallToAction";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import Partners from "@/components/home/Partners";
 import CertificationSection from "@/components/home/CertificationInfo";
-import CheckUpForManAndWoman from "@/components/home/CheckUpForManAndWoman";
+import HealthCheckups from "@/components/home/CheckUpForManAndWoman";
+import TrustedSection from "@/components/home/TrustedSection";
+import OurNetworks from "@/components/Address";
+import WhyBookTests from "@/components/home/WhyBookTests"
+import BookTestCTA from "@/components/BookTestCTA"
+
 
 // app/page.js
 export const metadata = {
@@ -29,7 +34,15 @@ export default function Home() {
 
       <CheckUpPackages />
 
-      <CheckUpForManAndWoman />
+      <HealthCheckups />
+
+      <TrustedSection />
+
+      <OurNetworks />
+
+      <WhyBookTests />
+
+      <BookTestCTA />
 
       <TestsByHealth />
 

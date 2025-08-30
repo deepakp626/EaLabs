@@ -9,24 +9,19 @@
     @apply cursor-pointer;
   }
 }
-/* @import "tailwindcss";
 
+/* Define colors */
 :root {
+  --primary-color: #1d4ed8; /* Set your primary color */
   --background: #ffffff;
   --foreground: #171717;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* --background: #0a0a0a; */
+    /* --foreground: #ededed; */
+    --primary-color: #3b82f6; /* Dark mode primary color */
   }
 }
 
@@ -34,10 +29,4 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-} */
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
 }
