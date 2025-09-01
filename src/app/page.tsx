@@ -7,6 +7,13 @@ import BookLabTests from "@/components/home/BookLabTests";
 import CallToAction from "@/components/CallToAction";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import Partners from "@/components/home/Partners";
+import CertificationSection from "@/components/home/CertificationInfo";
+import HealthCheckups from "@/components/home/CheckUpForManAndWoman";
+import TrustedSection from "@/components/home/TrustedSection";
+import OurNetworks from "@/components/Address";
+import WhyBookTests from "@/components/home/WhyBookTests"
+import BookTestCTA from "@/components/BookTestCTA"
+
 
 // app/page.js
 export const metadata = {
@@ -21,19 +28,31 @@ export default function Home() {
       
       <HeroSection />
 
-      <ServiceCards />
+      {/* <ServiceCards /> */}
+
+      <CertificationSection />
 
       <CheckUpPackages />
 
-      <TestsByHealth />
+      <HealthCheckups />
 
-      <BookLabTests />
+      <TrustedSection />
 
-      <CallToAction />
+      <OurNetworks />
 
-      <WhyChooseUs />
+      <WhyBookTests />
 
-      <Partners />
+      <BookTestCTA />
+
+      {/* <TestsByHealth /> */}
+
+      {/* <BookLabTests /> */}
+
+      {/* <CallToAction /> */}
+
+      {/* <WhyChooseUs /> */}
+
+      {/* <Partners /> */}
 
     </div>
   );
