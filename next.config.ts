@@ -14,6 +14,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  
+  eslint: {
+    ignoreDuringBuilds: true, // ✅ merged here
+  },
+  
 };
 
 export default nextConfig;

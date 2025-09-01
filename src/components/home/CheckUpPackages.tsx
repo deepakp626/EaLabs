@@ -3,6 +3,15 @@
 import { useState } from "react";
 import Heading from "../Heading";
 
+interface Card {
+  _id: string;
+  title: string;
+  category: string;
+  testCount: number;
+  discount?: string;
+  image?: any;
+}
+
 const categories = [
   { id: "heart", label: "Heart", icon: "❤️" },
   { id: "liver", label: "Liver", icon: "🫀" },
@@ -11,6 +20,7 @@ const categories = [
   { id: "thyroid", label: "Thyroid", icon: "🦋" },
   { id: "allergy", label: "Allergy", icon: "🤧" },
 ];
+
 
 const testData = {
   thyroid: [

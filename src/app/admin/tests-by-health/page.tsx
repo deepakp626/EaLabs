@@ -8,8 +8,8 @@ export default function HealthConcernForm() {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState<File | null>(null);
 
-  const compressImage = async (file: File) => {
-    return new Promise((resolve) => {
+  const compressImage = async (file: File): Promise<File> => {
+    return new Promise<File>((resolve) => {
       Resizer.imageFileResizer(
         file,
         1920,
@@ -18,12 +18,23 @@ export default function HealthConcernForm() {
         80,
         0,
         (uri) => {
-          resolve(uri as File);
+          // Resizer returns `Blob | File | string` depending on output type
+          if (uri instanceof File) {
+            resolve(uri);
+          } else if (uri instanceof Blob) {
+            resolve(new File([uri], file.name, { type: uri.type }));
+          } else {
+            // base64 string case (shouldn’t happen with "file", but safe fallback)
+            fetch(uri as string)
+              .then(res => res.blob())
+              .then(blob => resolve(new File([blob], file.name, { type: blob.type })));
+          }
         },
         'file'
       );
     });
   };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
