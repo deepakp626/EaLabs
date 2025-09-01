@@ -50,9 +50,9 @@ const HeroSection = () => {
     }
   };
 
-  if (!heroData) {
-    return <div>Loading...</div>; // Or any loading indicator
-  }
+  // if (!heroData) {
+  //   return <div>Loading...</div>; // Or any loading indicator
+  // }
 
   return (
     <section
