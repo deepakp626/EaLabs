@@ -54,29 +54,3 @@ export async function GET() {
 }
 
 // DELETE /api/healthconcerns/:id
-export async function DELETE( req: NextRequest, { params }: { params: { id: string } } ) {
-
-  try {
-    const { id } = params;
-
-    const deleted = await HealthConcern.findByIdAndDelete(id);
-
-    if (!deleted) {
-      return NextResponse.json(
-        { error: "Health concern not found" },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json(
-      { message: "Health concern deleted successfully" },
-      { status: 200 }
-    );
-  } catch (err) {
-    console.error(err);
-    return NextResponse.json(
-      { error: "Failed to delete health concern" },
-      { status: 500 }
-    );
-  }
-}
