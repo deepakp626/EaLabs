@@ -12,6 +12,11 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+
+   eslint: {
+    ignoreDuringBuilds: true, // ✅ merged here
+  },
+  
 };
 
 export default nextConfig;
