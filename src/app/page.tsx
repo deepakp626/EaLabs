@@ -44,15 +44,15 @@ export default function Home() {
 
       <BookTestCTA />
 
-      <TestsByHealth />
+      {/* <TestsByHealth /> */}
 
-      <BookLabTests />
+      {/* <BookLabTests /> */}
 
-      <CallToAction />
+      {/* <CallToAction /> */}
 
-      <WhyChooseUs />
+      {/* <WhyChooseUs /> */}
 
-      <Partners />
+      {/* <Partners /> */}
 
     </div>
   );
