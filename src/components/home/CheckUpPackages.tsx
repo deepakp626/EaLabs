@@ -6,13 +6,22 @@ import { RootState } from '@/store/store';
 import Image from 'next/image';
 import axiosInstance from '@/lib/axios';
 
+interface Card {
+  _id: string;
+  title: string;
+  category: string;
+  testCount: number;
+  discount?: string;
+  image?: any;
+}
+
 // Main App component which contains the entire tab section UI
 const CheckUpPackages = () => {
     const dispatch = useDispatch();
     const [categories, setCategories] = useState<string[]>([]);
-    const [cards, setCards] = useState([]);
+    const [cards, setCards] = useState<Card[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState("");
 
     // Use state to keep track of the currently active tab
     const [activeTab, setActiveTab] = useState('all-tests');

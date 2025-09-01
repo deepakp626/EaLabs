@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 
 const MONGODB_URI: string = process.env.NODE_ENV === "development"
-  ? process.env.MONGO_URI_DEVELOPMENT
-  : process.env.MONGO_URI_PRODUCTION;
+                             ? (process.env.MONGO_URI_DEVELOPMENT as string)
+                             : (process.env.MONGO_URI_PRODUCTION as string);
 
 if (!MONGODB_URI) {
   throw new Error(
