@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { saveCheckupPackages, addCategory, addCard } from '@/store/features/checkupPackagesSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import toast from 'react-hot-toast';
+import axiosInstance from '@/lib/axios';
 
 interface PackageCard {
   image: File | string | null;
@@ -133,7 +134,7 @@ const CheckupPackageCard: React.FC<CheckupPackageCardProps> = ({ packages, cards
           Add Card
         </button>
       </div>
-      
+
     </div>
   );
 };
@@ -150,12 +151,40 @@ const CheckupPackagesPage = () => {
     setLocalCards(cards);
   }, [categories, cards]);
 
-  const handleSubmit = async () => {
-    // console.log('Categories to save:', localCategories);
-    // console.log('Cards to save:', localCards);
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  };
 
+  const handleSubmit = async () => {
     try {
-      await dispatch(saveCheckupPackages({ categories: localCategories, cards: localCards })).unwrap();
+      // Convert File → base64 before sending
+      const cardsWithBase64Images = await Promise.all(
+        localCards.map(async (card) => {
+          if (card.image instanceof File) {
+            const base64Image = await fileToBase64(card.image);
+            return { ...card, image: base64Image };
+          }
+          return card;
+        })
+      );
+
+      // API request
+      await axiosInstance.post(
+        '/admin/checkup-packages',
+        {
+          categories: localCategories,
+          cards: cardsWithBase64Images,
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+
       toast.success('Checkup packages saved successfully!');
     } catch (error) {
       toast.error('Failed to save checkup packages. Please try again.');
@@ -163,35 +192,48 @@ const CheckupPackagesPage = () => {
     }
   };
 
+  // const handleSubmit = async () => {
+  //   // console.log('Categories to save:', localCategories);
+  //   // console.log('Cards to save:', localCards);
+
+  //   try {
+  //     await dispatch(saveCheckupPackages({ categories: localCategories, cards: localCards })).unwrap();
+  //     toast.success('Checkup packages saved successfully!');
+  //   } catch (error) {
+  //     toast.error('Failed to save checkup packages. Please try again.');
+  //     console.error('Error saving checkup packages:', error);
+  //   }
+  // };
+
   const handleAddPackage = (newPackage: string) => {
     dispatch(addCategory(newPackage));
   };
 
   const handleAddCard = (newCard: PackageCard) => {
-    dispatch(addCard(newCard));
+    // dispatch(addCard(newCard));
   };
 
   return (
     <>
       <h1 className="text-2xl font-bold mb-4">Checkup Packages Management</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-        <CheckupPackageList 
-          packages={localCategories} 
+        <CheckupPackageList
+          packages={localCategories}
           setPackages={(packages) => {
             setLocalCategories(packages);
-            handleAddPackage(packages[packages.length - 1]);
-          }} 
+            // handleAddPackage(packages[packages.length - 1]);
+          }}
         />
-        <CheckupPackageCard 
-          packages={localCategories} 
-          cards={localCards} 
+        <CheckupPackageCard
+          packages={localCategories}
+          cards={localCards}
           setCards={(cards) => {
             setLocalCards(cards);
-            handleAddCard(cards[cards.length - 1]);
-          }} 
+            // handleAddCard(cards[cards.length - 1]);
+          }}
         />
       </div>
-      
+
       {/* New section to list all cards */}
       <div className="mb-8">
         <h2 className="text-xl font-semibold mb-4">All Cards</h2>
@@ -199,12 +241,12 @@ const CheckupPackagesPage = () => {
           {localCards.map((card, index) => (
             <div key={index} className="border p-4 rounded shadow-sm">
               {card.image && (
-                <Image 
+                <Image
                   src={card.image instanceof File ? URL.createObjectURL(card.image) : card.image}
-                  alt={card.title} 
-                  width={100} 
-                  height={100} 
-                  className="mb-2 object-cover" 
+                  alt={card.title}
+                  width={100}
+                  height={100}
+                  className="mb-2 object-cover"
                 />
               )}
               <h3 className="font-semibold">{card.title}</h3>
@@ -214,7 +256,7 @@ const CheckupPackagesPage = () => {
           ))}
         </div>
       </div>
-      
+
       <div className="flex justify-end">
         <button
           onClick={handleSubmit}
