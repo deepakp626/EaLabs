@@ -21,8 +21,18 @@ const categories = [
   { id: "allergy", label: "Allergy", icon: "🤧" },
 ];
 
+interface TestData {
+  [key: string] : {
+    title: string;
+    desc: string;
+    includes: string;
+    for: string;
+    reports: string;
+    price: string;
+  }[];
+}
 
-const testData = {
+const testData:TestData = {
   thyroid: [
     {
       title: "Thyroid Basic (TSH)",

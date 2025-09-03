@@ -3,11 +3,12 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchHeroData, setCards } from '@/store/features/heroSlice';
+import { RootState,AppDispatch } from '@/store/store';
 import axiosInstance from '@/lib/axios';
 import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
 
 const HeroSection = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [heroData, setHeroData] = useState(null);
   const [activeTab, setActiveTab] = useState("About Ea Labs"); // State for the active tab
   const { heroImage, cards, status, error } = useSelector((state: RootState) => state.hero);
@@ -30,8 +31,15 @@ const HeroSection = () => {
     fetchHeroData();
   }, [dispatch]);
 
+  interface TabContent {
+    [key: string]: {
+      title: string,
+      description: string
+    }
+  }
+
   // Tab content mapping
-  const tabContent = {
+  const tabContent: TabContent = {
     "About Ea Labs": {
       title: "Welcome to EA Labs",
       description: "We provide precision diagnostics and care you can trust."
