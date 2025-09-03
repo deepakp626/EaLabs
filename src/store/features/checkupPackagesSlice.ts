@@ -12,7 +12,7 @@ interface CheckupPackagesState {
 
 // Define the PackageCard interface if not already defined
 interface PackageCard {
-  image: string;
+  image: string | File;
   title: string;
   testCount: number;
   category: string;

@@ -10,8 +10,18 @@ import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import Heading from "./Heading";
 import axiosInstance from "@/lib/axios";
 
+interface Review {
+  _id: string;
+  userName: string;
+  userReview: string;
+  image: Buffer;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
 const ReviewSlider = () => {
-  const [reviews, setReviews] = useState([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
 
   useEffect(() => {
     const getReviews = async () => {
